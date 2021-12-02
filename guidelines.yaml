@@ -1,0 +1,18 @@
+1. Project ==> app: This contains source code related to created and managing a project (trello project).
+
+
+Model: 
+  - Board:
+    - name
+    - date and time
+    - author (may not need it though because of User authentication which we're not implementing now)
+    - description (which is a markdown)
+    - attachments (image, videos)
+    - colloborators (users working on that board)
+    - list:
+      cards
+
+
+Routes:
+  - /board/create
+  - /board/<int:pk>/  GET, UPDATE, DELETE
