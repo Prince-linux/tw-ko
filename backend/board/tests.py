@@ -5,8 +5,8 @@ import unittest
 
 from rest_framework import serializers
 
-from .serializers import BoardSerializer, ListSerializer
-from .models import Board, List 
+from .serializers import BoardSerializer, ListSerializer, CardSerializer
+from .models import Board, List, Card
 
 
 
@@ -92,6 +92,42 @@ class ListSerializerTest(TestCase):
         serializer = ListSerializer(data=self.list_data)
 
         self.assertFalse(serializer.is_valid())
+
+class CardSerializerTest(TestCase):
+    def setUp(self):
+        self.card_data = {
+            "name": "Test Board Name",
+            "description": "Some board created during testing"
+        }
+
+    def test_is_valid(self):
+        serializer = CardSerializer(data=self.board_data)
+        self.assertTrue(serializer.is_valid())
+
+        card = serializer.save()  
+
+        db_card = Card.objects.first()
+
+        self.assertEqual(card, db_card)
+
+        for field, value in self.card_data.items():
+            self.assertEqual(value, getattr(db_card, field))
+        
+        # test for the date field 
+        self.assertTrue("date", hasattr(db_card, "date"))
+        self.assertIsNotNone(db_card.date)
+
+
+    def test_invalid(self):
+        # missing name field 
+        del self.card_data["name"]
+        serializer = CardSerializer(data=self.card_data)
+
+        self.assertFalse(serializer.is_valid())
+
+
+class AttachmentsSerializerTest(TestCase):
+    def 
 
 
 # class TestList:
