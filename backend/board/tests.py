@@ -126,8 +126,10 @@ class CardSerializerTest(TestCase):
         self.assertFalse(serializer.is_valid())
 
 
-class AttachmentsSerializerTest(TestCase):
-    def 
+# class AttachmentsSerializerTest(TestCase):
+#     def test_model(self):
+#         attachment = mixer.blend('boards.Attachment')
+#         assert attachment.pk == 1, 'Should create a Attachment instance'
 
 
 # class TestList:
