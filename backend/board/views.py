@@ -12,12 +12,6 @@ from board.models import Board, Card, List,  Attachment
 
 from .serializers import BoardSerializer, CardSerializer, ListSerializer, AttachmentSerializer
 
-
-class BoardView(viewsets.ModelViewSet):
-    serializer_class = BoardSerializer
-    queryset = Board.objects.all()
-
-
 """
   - api/boards/   GET (LIST), POST
   - api/board/<int:pk>/  GET, UPDATE, DELETE
@@ -62,3 +56,62 @@ def board_list_create(request):
     serializer = BoardSerializer(board, many=True)
 
     return Response(data={"success": True, "boards": serializer.data})
+
+  
+@api_view(['GET','PUT','DELETE'])
+def board_detail(request, pk):
+    try:
+        board = Board.objects.get(pk=pk)
+    except Board.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+  
+    if request.method == 'GET':
+        serializer = BoardSerializer(board)
+        return Response(serializer.data)
+  
+    elif request.method == 'PUT':
+        serializer = BoardSerializer(board, data=request.data)
+  
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+    elif request.method == 'DELETE':
+        board.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+  
+# @api_view(['GET','PUT','PATCH','DELETE'])
+# def board_detail(request, pk):
+#     try:
+#         board = Board.objects.get(pk=pk)
+#     except Board.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+  
+#     if request.method == 'GET':
+#         serializer = BoardSerializer(board)
+#         return Response(serializer.data)
+  
+#     elif request.method == 'PUT':
+#         serializer = BoardSerializer(board, data=request.data)
+  
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors,
+#                         status=status.HTTP_400_BAD_REQUEST)
+#     elif request.method == 'PATCH':
+#         serializer = BoardSerializer(board, data=request.data, partial=True)
+  
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors,
+#                         status=status.HTTP_400_BAD_REQUEST)
+  
+#     elif request.method == 'DELETE':
+#         board.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
