@@ -20,7 +20,7 @@ class ListSerializer(serializers.ModelSerializer):
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        exclude = ("attachments",)
+        fields = "__all__"
 
 class AttachmentSerializer(serializers.ModelSerializer):
 
