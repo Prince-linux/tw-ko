@@ -10,7 +10,6 @@ class Board(models.Model):
     #author
     date = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=300, **NULL_KWARGS)
-    #attachments = models.FileField(blank=True, upload_to='uploads')
     #collaborators
 
     def __str__(self):
@@ -32,7 +31,7 @@ class Attachment(models.Model):
         ("document", "document"),
         ("video", "video"),
     )
-    file = models.FileField(upload_to='uploads')
+    file = models.FileField(upload_to='uploads', blank=True, null=True)
     type = models.CharField(max_length=300, choices=TYPE_CHOICES)
 
 
