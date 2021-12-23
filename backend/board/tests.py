@@ -127,30 +127,6 @@ class CardSerializerTest(TestCase):
         self.assertFalse(serializer.is_valid())
 
 
-# class AttachmentsSerializerTest(TestCase):
-#     def test_model(self):
-#         attachment = mixer.blend('boards.Attachment')
-#         assert attachment.pk == 1, 'Should create a Attachment instance'
-
-
-# class TestList:
-#     def test_str(self):
-#         list = mixer.blend('boards.List')
-#         assert list.title == str(list), 'Should check the List name'
-
-#     def test_save(self):
-#         board = mixer.blend('boards.Board')
-#         list1 = mixer.blend('boards.List', board=board)
-#         list2 = mixer.blend('boards.List', board=board)
-#         assert list1.order == 2 ** 16 - 1 
-#         assert list1.order == list2.order - (2 ** 16 - 1)
-#         list3 = mixer.blend('boards.List', board=board)
-#         list4 = mixer.blend('boards.List', board=board)
-#         list1.delete()
-#         list5 = mixer.blend('boards.List', board=board)
-#         assert list5.order == 5 * (2 ** 16 - 1)
-
-
 class BoardViewTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
@@ -189,6 +165,9 @@ class BoardViewTest(APITestCase):
         self.assertEqual(data["name"], response_board["name"])
         self.assertEqual(data["description"], response_board["description"])
     
-
+    # def test_board_detail(self):
+    #     data = {
+    #         "board": "
+    #     }
 
         
