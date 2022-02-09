@@ -13,7 +13,7 @@ class Board(models.Model):
     #collaborators
 
     def __str__(self):
-        return self.title
+        return self.name
 
 class List(models.Model):
     board = models.ForeignKey(Board, on_delete=CASCADE, related_name='lists')
@@ -38,7 +38,7 @@ class Attachment(models.Model):
 class Card(models.Model):
     list = models.ForeignKey(List, on_delete=CASCADE, related_name="cards", **NULL_KWARGS)
     description = models.TextField(**NULL_KWARGS)
-    attachments = models.ManyToManyField(Attachment)
+    attachments = models.ManyToManyField(Attachment, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
 
