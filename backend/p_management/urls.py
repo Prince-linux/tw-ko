@@ -25,9 +25,10 @@ router.register(r'tasks', views.BoardView, 'task')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path("api/", include("board.urls")),
+    path("api/", include(("board.urls", 'board'), namespace="board")),
 ]
 
 
 if settings.DEBUG:
-  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
