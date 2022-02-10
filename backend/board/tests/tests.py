@@ -321,3 +321,104 @@ class AttachmentViewTest(APITestCase):
         with self.assertRaises(Attachment.DoesNotExist):
             # Raise does not exist
             Attachment.objects.get(file=self.attachment_data["file"])
+
+
+class ListViewTest(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+        self.list_data = {
+            "title": "Test List",
+            "board": {
+                "id": 1
+            }
+        }
+        # create(name="", description="")
+        self.list = List.objects.create(**self.list_data)
+
+    def test_get_all_lists(self):
+        """
+        Tests that all boards can be fetched on route: /api/boards/ -- LIST (GET)
+        """
+
+        response = self.client.get(reverse("board:lists"))
+
+        self.assertTrue(response.json()["success"])
+        self.assertEqual(response.status_code, 200)
+
+        response_lists = response.json()["lists"]
+
+        for list in response_lists:
+            db_list = List.objects.get(title=list["title"])
+
+            for key, value in list.items():
+                self.assertEqual(value, getattr(db_list, key))
+
+    def test_create_list(self):
+        """
+        Tests for route: /api/boards/  -- POST
+        """
+        data = {
+            "title": "List title",
+            "board": {
+                "id": 1,
+            }
+        }
+        response = self.client.post(reverse("board:lists"), data=data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(response.json()["success"])
+
+        db_lists = List.objects.get(title=data["title"])
+
+        self.assertEqual(data["title"], db_lists.title)
+        self.assertEqual(data["board"], db_lists.board)
+
+        response_list = response.json()["lists"]
+
+        self.assertEqual(data["title"], response_list["title"])
+        self.assertEqual(data["board"], response_list["board"])
+
+    def test_get_a_single_list(self):
+        """
+        Tests that a single board can be fetched on route: /api/boards/<int:pk>/
+        """
+        # Create a board [Done]
+        # hit the endpoint with the board's pk on /api/boards/<int:pk>/
+        # Assert the content
+
+        response = self.client.get(
+            reverse("board:list-detail", args=(self.list.pk,)))
+        self.assertEqual(response.status_code, 200)
+
+        for field, value in self.list_data.items():
+            self.assertEqual(value, getattr(self.list, field))
+
+    def test_update_a_single_list(self):
+        """
+        Test that a single board can be updated on route: /api/boards/<int:pk>/
+        """
+        update_data = {
+            "title": "An edited list",
+            "board": {
+                "id": 1,
+            }
+        }
+        response = self.client.put(
+            reverse("board:list-detail", args=(self.list.pk,)), data=update_data)
+        self.assertEqual(response.status_code, 200)
+        self.list.refresh_from_db()
+        self.assertEqual(update_data['title'], self.list.title)
+
+    def test_delete_a_single_board(self):
+        """
+        Test that a single board can be deleted on route: /api/boards/<int:pk>/
+        """
+
+        response = self.client.delete(
+            reverse("board:list-detail", args=(self.list.pk,)))
+        self.assertEqual(response.status_code,  204)
+
+        with self.assertRaises(List.DoesNotExist):
+            # Raise does not exist
+            List.objects.get(title=self.list_data["title"])
