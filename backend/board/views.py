@@ -166,7 +166,7 @@ def list_create(request):
 
         serializer.save()
 
-        return Response(data={"success": True, "list": serializer.data}, status=status.HTTP_201_CREATED)
+        return Response(data={"success": True, "lists": serializer.data}, status=status.HTTP_201_CREATED)
 
     list = List.objects.all()
 
