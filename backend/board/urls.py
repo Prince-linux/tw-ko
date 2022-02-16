@@ -13,6 +13,6 @@ urlpatterns = [
          views.attachment_detail, name='attachment-detail'),
     path('boards/card/', views.card_create, name='card'),
     path('boards/card/<int:pk>/', views.card_detail, name='card-detail'),
-    path("boards/list/", views.list_create, name="list"),
+    path("boards/list/", views.list_create, name="lists"),
     path('boards/list/<int:pk>/', views.list_detail, name='list-detail'),
 ]
