@@ -166,13 +166,13 @@ def list_create(request):
 
         serializer.save()
 
-        return Response(data={"success": True, "board": serializer.data}, status=status.HTTP_201_CREATED)
+        return Response(data={"success": True, "list": serializer.data}, status=status.HTTP_201_CREATED)
 
     list = List.objects.all()
 
     serializer = ListSerializer(list, many=True)
 
-    return Response(data={"success": True, "boards": serializer.data})
+    return Response(data={"success": True, "lists": serializer.data})
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
